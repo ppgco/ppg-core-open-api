@@ -119,4 +119,4 @@ Join our [Discord](https://discord.gg/NVpUWvreZa) for docs, support, talk or jus
 
 ## Swagger
 
-You can get actual API specification via [our swagger](https://ppgco.github.io/ppg-core-open-api/swagger-ui/)
+You can get actual API specification via [our swagger](https://ppgco.github.io/ppg-core-open-api/)
