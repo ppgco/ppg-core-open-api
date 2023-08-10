@@ -1,4 +1,4 @@
-# **CORE** _by PushPushGo_ SDK for JavaScript / TypeScript
+# **CORE** _by PushPushGo_ OpenAPI Specification
 
 [![npmjs version](https://img.shields.io/npm/v/@pushpushgo/core-sdk-js?style=flat-square)](https://www.npmjs.com/package/@pushpushgo/core-sdk-js)
 ![GitHub Workflow Status (main)](https://img.shields.io/github/actions/workflow/status/ppgco/ppg-core-js-sdk/publish.yml?style=flat-square)
@@ -119,4 +119,4 @@ Join our [Discord](https://discord.gg/NVpUWvreZa) for docs, support, talk or jus
 
 ## Swagger
 
-You can get actual API specification via [our swagger](https://swagger)
+You can get actual API specification via [our swagger](https://ppgco.github.io/ppg-core-open-api/swagger-ui/)
