@@ -27,7 +27,7 @@ jobs:
           uses: Legion2/swagger-ui-action@v1
           with:
             output: swagger-ui
-            spec-file: openapi.json
+            spec-file: ./openapi.json
         - name: Setup Pages
           uses: actions/configure-pages@v3
         - name: Upload artifact
