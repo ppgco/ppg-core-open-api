@@ -1,0 +1,2417 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "ppg-core",
+    "version": "v1"
+  },
+  "components": {
+    "securitySchemes": {
+      "ApiKeyAuth": {
+        "type": "apiKey",
+        "in": "header",
+        "name": "x-token"
+      }
+    },
+    "schemas": {
+      "com.ppg.core.HelloDto": {
+        "type": "object",
+        "properties": {
+          "currentVersion": {
+            "type": "string"
+          },
+          "discord": {
+            "type": "string"
+          },
+          "github": {
+            "type": "string"
+          },
+          "email": {
+            "type": "string"
+          }
+        },
+        "required": []
+      },
+      "com.ppg.core.CreateBucketResponseDto": {
+        "type": "object",
+        "properties": {
+          "bucketId": {
+            "type": "string"
+          },
+          "credentials": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "string"
+                },
+                "type": {
+                  "type": "string"
+                }
+              },
+              "required": []
+            }
+          }
+        },
+        "required": []
+      },
+      "com.ppg.core.CreateBucketContextResponseDto": {
+        "type": "object",
+        "properties": {
+          "contextId": {
+            "type": "string"
+          }
+        },
+        "required": []
+      },
+      "com.ppg.core.SendManyResponseDto": {
+        "type": "object",
+        "properties": {
+          "results": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "messageId": {
+                  "type": "string"
+                },
+                "errors": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                }
+              },
+              "required": []
+            }
+          }
+        },
+        "required": []
+      },
+      "com.ppg.core.MessageResponseDto": {
+        "type": "object",
+        "properties": {
+          "messageId": {
+            "type": "string"
+          },
+          "errors": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        },
+        "required": []
+      },
+      "com.ppg.core.CommonErrorDto": {
+        "type": "object",
+        "properties": {
+          "message": {
+            "example": "input command validation failed",
+            "type": "string"
+          },
+          "errors": {
+            "example": [
+              "filed \"name\" expected to be string got number",
+              "filed \"age\" expected to be number got string"
+            ],
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        },
+        "required": []
+      },
+      "com.ppg.core.RegisterClickedDto": {
+        "type": "object",
+        "properties": {
+          "action": {
+            "type": "string"
+          },
+          "foreignId": {
+            "type": "string"
+          },
+          "messageId": {
+            "type": "string"
+          }
+        },
+        "required": []
+      },
+      "com.ppg.core.RegisterDeliveredDto": {
+        "type": "object",
+        "properties": {
+          "foreignId": {
+            "type": "string"
+          },
+          "messageId": {
+            "type": "string"
+          }
+        },
+        "required": []
+      },
+      "com.ppg.core.RegisterClosedDto": {
+        "type": "object",
+        "properties": {
+          "foreignId": {
+            "type": "string"
+          },
+          "messageId": {
+            "type": "string"
+          }
+        },
+        "required": []
+      },
+      "com.ppg.core.CreateBucketDto": {
+        "type": "object",
+        "properties": {
+          "callbackConfig": {
+            "oneOf": [
+              {
+                "type": "object",
+                "properties": {
+                  "type": {
+                    "type": "string",
+                    "example": "http"
+                  },
+                  "payload": {
+                    "type": "object",
+                    "properties": {
+                      "headers": {
+                        "example": {
+                          "x-secret": "**keyboard cat**"
+                        },
+                        "type": "object",
+                        "additionalProperties": {
+                          "type": "string"
+                        }
+                      },
+                      "url": {
+                        "example": "http://your-domain.com/some/path",
+                        "type": "string"
+                      }
+                    },
+                    "required": ["url"]
+                  }
+                },
+                "required": []
+              },
+              {
+                "type": "object",
+                "properties": {
+                  "type": {
+                    "type": "string",
+                    "example": "none"
+                  }
+                },
+                "required": []
+              }
+            ]
+          },
+          "providerCredentials": {
+            "type": "array",
+            "items": {
+              "oneOf": [
+                {
+                  "type": "object",
+                  "properties": {
+                    "type": {
+                      "type": "string",
+                      "example": "apns_cert"
+                    },
+                    "payload": {
+                      "type": "object",
+                      "properties": {
+                        "cert": {
+                          "description": "one of key or cert is required",
+                          "type": "string"
+                        },
+                        "key": {
+                          "description": "one of key or cert is required",
+                          "type": "string"
+                        },
+                        "appBundleId": {
+                          "type": "string"
+                        },
+                        "p12": {
+                          "type": "string"
+                        },
+                        "passphrase": {
+                          "type": "string"
+                        },
+                        "production": {
+                          "type": "boolean"
+                        },
+                        "websitePushId": {
+                          "type": "string"
+                        }
+                      },
+                      "required": []
+                    }
+                  },
+                  "required": []
+                },
+                {
+                  "type": "object",
+                  "properties": {
+                    "type": {
+                      "type": "string",
+                      "example": "apns_token"
+                    },
+                    "payload": {
+                      "type": "object",
+                      "properties": {
+                        "appBundleId": {
+                          "type": "string"
+                        },
+                        "key": {
+                          "type": "string"
+                        },
+                        "keyId": {
+                          "type": "string"
+                        },
+                        "production": {
+                          "type": "string"
+                        },
+                        "teamId": {
+                          "type": "string"
+                        },
+                        "websitePushId": {
+                          "type": "string"
+                        }
+                      },
+                      "required": []
+                    }
+                  },
+                  "required": []
+                },
+                {}
+              ]
+            }
+          }
+        },
+        "required": ["callbackConfig"]
+      },
+      "com.ppg.core.CreateBucketRawContextDto": {
+        "type": "object",
+        "properties": {
+          "common": {
+            "type": "object",
+            "properties": {
+              "title": {
+                "type": "string"
+              },
+              "body": {
+                "type": "string"
+              },
+              "collapseKey": {
+                "type": "string"
+              },
+              "data": {
+                "oneOf": [
+                  {
+                    "type": "object",
+                    "additionalProperties": {
+                      "type": "string"
+                    }
+                  },
+                  {
+                    "type": "string"
+                  }
+                ]
+              },
+              "expiresAt": {
+                "type": "string"
+              },
+              "iconUrl": {
+                "type": "string"
+              },
+              "imageUrl": {
+                "type": "string"
+              },
+              "ttl": {
+                "type": "number"
+              }
+            },
+            "required": []
+          },
+          "chromium": {
+            "type": "object",
+            "properties": {
+              "badge": {
+                "description": "The URL of the image used to represent the notification when there is not enough space to display the notification itself. Experimental.",
+                "type": "string"
+              },
+              "image": {
+                "description": "The URL of an image to be displayed as part of the notification, as specified in the constructor's options parameter. Experimental.",
+                "type": "string"
+              },
+              "icon": {
+                "description": "The URL of the image used as an icon of the notification as specified in the constructor's options parameter.",
+                "type": "string"
+              },
+              "actions": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "action": {
+                      "type": "string"
+                    },
+                    "title": {
+                      "type": "string"
+                    },
+                    "icon": {
+                      "type": "string"
+                    }
+                  },
+                  "required": []
+                }
+              },
+              "body": {
+                "description": "The body string of the notification as specified in the constructor's options parameter",
+                "type": "string"
+              },
+              "data": {
+                "description": "Custom payload string object string|object",
+                "oneOf": [
+                  {
+                    "type": "object",
+                    "additionalProperties": {}
+                  },
+                  {
+                    "type": "string"
+                  }
+                ]
+              },
+              "defaultAction": {
+                "type": "string"
+              },
+              "dir": {
+                "description": "The text direction of the notification as specified in the constructor's options parameter",
+                "type": "string",
+                "enum": ["auto", "ltr", "rtl"]
+              },
+              "expiresAt": {
+                "type": "string"
+              },
+              "lang": {
+                "description": "The language code of the notification as specified in the constructor's options parameter",
+                "type": "string"
+              },
+              "renotify": {
+                "description": "Specifies whether the user should be notified after a new notification replaces an old one",
+                "type": "boolean"
+              },
+              "requireInteraction": {
+                "description": "A boolean value indicating that a notification should remain active \nuntil the user clicks or dismisses it, rather than closing automatically.\nExperimental",
+                "type": "boolean"
+              },
+              "silent": {
+                "description": "Specifies whether the notification should be silent — i.e.,\nno sounds or vibrations should be issued, regardless of the device settings.\nExperimental",
+                "type": "boolean"
+              },
+              "tag": {
+                "description": "The ID of the notification (if any) as specified in the constructor's options parameter.",
+                "type": "string"
+              },
+              "title": {
+                "description": "The title of the notification.",
+                "type": "string"
+              },
+              "ttl": {
+                "type": "number"
+              },
+              "vibrate": {
+                "description": "Specifies a vibration pattern for devices with vibration hardware to emit.\nExperimental",
+                "type": "array",
+                "items": {
+                  "type": "number"
+                }
+              }
+            },
+            "required": []
+          },
+          "edge": {
+            "type": "object",
+            "properties": {
+              "badge": {
+                "description": "The URL of the image used to represent the notification when there is not enough space to display the notification itself. Experimental.",
+                "type": "string"
+              },
+              "image": {
+                "description": "The URL of an image to be displayed as part of the notification, as specified in the constructor's options parameter. Experimental.",
+                "type": "string"
+              },
+              "icon": {
+                "description": "The URL of the image used as an icon of the notification as specified in the constructor's options parameter.",
+                "type": "string"
+              },
+              "actions": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "action": {
+                      "type": "string"
+                    },
+                    "title": {
+                      "type": "string"
+                    },
+                    "icon": {
+                      "type": "string"
+                    }
+                  },
+                  "required": []
+                }
+              },
+              "body": {
+                "description": "The body string of the notification as specified in the constructor's options parameter",
+                "type": "string"
+              },
+              "data": {
+                "description": "Custom payload string object string|object",
+                "oneOf": [
+                  {
+                    "type": "object",
+                    "additionalProperties": {}
+                  },
+                  {
+                    "type": "string"
+                  }
+                ]
+              },
+              "defaultAction": {
+                "type": "string"
+              },
+              "dir": {
+                "description": "The text direction of the notification as specified in the constructor's options parameter",
+                "type": "string",
+                "enum": ["auto", "ltr", "rtl"]
+              },
+              "expiresAt": {
+                "type": "string"
+              },
+              "lang": {
+                "description": "The language code of the notification as specified in the constructor's options parameter",
+                "type": "string"
+              },
+              "renotify": {
+                "description": "Specifies whether the user should be notified after a new notification replaces an old one",
+                "type": "boolean"
+              },
+              "requireInteraction": {
+                "description": "A boolean value indicating that a notification should remain active \nuntil the user clicks or dismisses it, rather than closing automatically.\nExperimental",
+                "type": "boolean"
+              },
+              "silent": {
+                "description": "Specifies whether the notification should be silent — i.e.,\nno sounds or vibrations should be issued, regardless of the device settings.\nExperimental",
+                "type": "boolean"
+              },
+              "tag": {
+                "description": "The ID of the notification (if any) as specified in the constructor's options parameter.",
+                "type": "string"
+              },
+              "title": {
+                "description": "The title of the notification.",
+                "type": "string"
+              },
+              "ttl": {
+                "type": "number"
+              },
+              "vibrate": {
+                "description": "Specifies a vibration pattern for devices with vibration hardware to emit.\nExperimental",
+                "type": "array",
+                "items": {
+                  "type": "number"
+                }
+              }
+            },
+            "required": []
+          },
+          "firefox": {
+            "type": "object",
+            "properties": {
+              "badge": {
+                "description": "The URL of the image used to represent the notification when there is not enough space to display the notification itself. Experimental.",
+                "type": "string"
+              },
+              "image": {
+                "description": "The URL of an image to be displayed as part of the notification, as specified in the constructor's options parameter. Experimental.",
+                "type": "string"
+              },
+              "icon": {
+                "description": "The URL of the image used as an icon of the notification as specified in the constructor's options parameter.",
+                "type": "string"
+              },
+              "actions": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "action": {
+                      "type": "string"
+                    },
+                    "title": {
+                      "type": "string"
+                    },
+                    "icon": {
+                      "type": "string"
+                    }
+                  },
+                  "required": []
+                }
+              },
+              "body": {
+                "description": "The body string of the notification as specified in the constructor's options parameter",
+                "type": "string"
+              },
+              "data": {
+                "description": "Custom payload string object string|object",
+                "oneOf": [
+                  {
+                    "type": "object",
+                    "additionalProperties": {}
+                  },
+                  {
+                    "type": "string"
+                  }
+                ]
+              },
+              "defaultAction": {
+                "type": "string"
+              },
+              "dir": {
+                "description": "The text direction of the notification as specified in the constructor's options parameter",
+                "type": "string",
+                "enum": ["auto", "ltr", "rtl"]
+              },
+              "expiresAt": {
+                "type": "string"
+              },
+              "lang": {
+                "description": "The language code of the notification as specified in the constructor's options parameter",
+                "type": "string"
+              },
+              "renotify": {
+                "description": "Specifies whether the user should be notified after a new notification replaces an old one",
+                "type": "boolean"
+              },
+              "requireInteraction": {
+                "description": "A boolean value indicating that a notification should remain active \nuntil the user clicks or dismisses it, rather than closing automatically.\nExperimental",
+                "type": "boolean"
+              },
+              "silent": {
+                "description": "Specifies whether the notification should be silent — i.e.,\nno sounds or vibrations should be issued, regardless of the device settings.\nExperimental",
+                "type": "boolean"
+              },
+              "tag": {
+                "description": "The ID of the notification (if any) as specified in the constructor's options parameter.",
+                "type": "string"
+              },
+              "title": {
+                "description": "The title of the notification.",
+                "type": "string"
+              },
+              "ttl": {
+                "type": "number"
+              },
+              "vibrate": {
+                "description": "Specifies a vibration pattern for devices with vibration hardware to emit.\nExperimental",
+                "type": "array",
+                "items": {
+                  "type": "number"
+                }
+              }
+            },
+            "required": []
+          },
+          "safariVapid": {
+            "type": "object",
+            "properties": {
+              "badge": {
+                "description": "The URL of the image used to represent the notification when there is not enough space to display the notification itself. Experimental.",
+                "type": "string"
+              },
+              "image": {
+                "description": "The URL of an image to be displayed as part of the notification, as specified in the constructor's options parameter. Experimental.",
+                "type": "string"
+              },
+              "icon": {
+                "description": "The URL of the image used as an icon of the notification as specified in the constructor's options parameter.",
+                "type": "string"
+              },
+              "actions": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "action": {
+                      "type": "string"
+                    },
+                    "title": {
+                      "type": "string"
+                    },
+                    "icon": {
+                      "type": "string"
+                    }
+                  },
+                  "required": []
+                }
+              },
+              "body": {
+                "description": "The body string of the notification as specified in the constructor's options parameter",
+                "type": "string"
+              },
+              "data": {
+                "description": "Custom payload string object string|object",
+                "oneOf": [
+                  {
+                    "type": "object",
+                    "additionalProperties": {}
+                  },
+                  {
+                    "type": "string"
+                  }
+                ]
+              },
+              "defaultAction": {
+                "type": "string"
+              },
+              "dir": {
+                "description": "The text direction of the notification as specified in the constructor's options parameter",
+                "type": "string",
+                "enum": ["auto", "ltr", "rtl"]
+              },
+              "expiresAt": {
+                "type": "string"
+              },
+              "lang": {
+                "description": "The language code of the notification as specified in the constructor's options parameter",
+                "type": "string"
+              },
+              "renotify": {
+                "description": "Specifies whether the user should be notified after a new notification replaces an old one",
+                "type": "boolean"
+              },
+              "requireInteraction": {
+                "description": "A boolean value indicating that a notification should remain active \nuntil the user clicks or dismisses it, rather than closing automatically.\nExperimental",
+                "type": "boolean"
+              },
+              "silent": {
+                "description": "Specifies whether the notification should be silent — i.e.,\nno sounds or vibrations should be issued, regardless of the device settings.\nExperimental",
+                "type": "boolean"
+              },
+              "tag": {
+                "description": "The ID of the notification (if any) as specified in the constructor's options parameter.",
+                "type": "string"
+              },
+              "title": {
+                "description": "The title of the notification.",
+                "type": "string"
+              },
+              "ttl": {
+                "type": "number"
+              },
+              "vibrate": {
+                "description": "Specifies a vibration pattern for devices with vibration hardware to emit.\nExperimental",
+                "type": "array",
+                "items": {
+                  "type": "number"
+                }
+              }
+            },
+            "required": []
+          },
+          "huawei": {
+            "type": "object",
+            "properties": {
+              "notification": {},
+              "biTag": {
+                "description": "Tag of a message in a batch delivery task.\nThe tag is returned to your server when Push Kit sends the message receipt.\nYour server can analyze message delivery statistics based on bi_tag.",
+                "type": "string"
+              },
+              "collapseKey": {
+                "description": "Mode for the Push Kit server to cache messages sent to an offline device. These cached messages will be delivered once the device goes online again. The options are as follows:\n0: Only the latest message sent by each app to the user device is cached.\n-1: All messages are cached.\n1-100: message cache group ID. Messages are cached by group. Each group can cache only one message for each app.\nFor example, if you send 10 messages and set collapse_key to 1 for the first five messages and to 2 for the rest, the latest message whose value of collapse_key is 1 and the latest message whose value of collapse_key is 2 are sent to the user after the user's device goes online.\nThe default value is -1.",
+                "type": "number"
+              },
+              "data": {
+                "description": "Custom message payload. If the data parameter is set, the value of the message.data field is overwritten.",
+                "type": "string"
+              },
+              "fastAppTarget": {
+                "description": "State of a mini program when a quick app sends a data message. The options are as follows:\n\t1: development state\n\t2: production state",
+                "type": "number"
+              },
+              "receiptId": {
+                "description": "Unique receipt ID that associates with the receipt URL and configuration of the downlink message. You can find the receipt ID in Message Receipt.",
+                "type": "string"
+              },
+              "ttl": {
+                "description": "Ttl in seconds",
+                "type": "number"
+              },
+              "expiresAt": {
+                "format": "Date.Iso8601",
+                "example": "2023-07-05T08:19:58.715Z",
+                "type": "string"
+              }
+            },
+            "required": []
+          },
+          "ios": {},
+          "safari": {},
+          "android": {}
+        },
+        "required": []
+      },
+      "com.ppg.core.CreateBucketDataContextDto": {
+        "type": "object",
+        "properties": {
+          "icon": {
+            "type": "string"
+          },
+          "smallIcon": {
+            "type": "string"
+          },
+          "image": {
+            "type": "string"
+          },
+          "channelName": {
+            "type": "string"
+          },
+          "badge": {
+            "type": "number"
+          },
+          "actions": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "action": {
+                  "type": "string"
+                },
+                "behaviour": {
+                  "type": "string"
+                },
+                "behaviourAndroid": {
+                  "type": "string"
+                },
+                "behaviourHuawei": {
+                  "type": "string"
+                },
+                "behaviourIos": {
+                  "type": "string"
+                },
+                "behaviourWebPush": {
+                  "type": "string"
+                },
+                "icon": {
+                  "type": "string"
+                },
+                "title": {
+                  "type": "string"
+                }
+              },
+              "required": []
+            }
+          },
+          "behaviour": {
+            "type": "string"
+          },
+          "behaviourAndroid": {
+            "type": "string"
+          },
+          "behaviourHuawei": {
+            "type": "string"
+          },
+          "behaviourIos": {
+            "type": "string"
+          },
+          "behaviourWebPush": {
+            "type": "string"
+          },
+          "title": {
+            "type": "string"
+          },
+          "body": {
+            "type": "string"
+          },
+          "subtitle": {
+            "type": "string"
+          },
+          "expiresAt": {
+            "type": "string"
+          },
+          "lang": {
+            "type": "string"
+          },
+          "renotify": {
+            "type": "boolean"
+          },
+          "requireInteraction": {
+            "type": "boolean"
+          },
+          "silent": {
+            "type": "boolean"
+          },
+          "tag": {
+            "type": "string"
+          },
+          "ttl": {
+            "type": "number"
+          },
+          "externalData": {
+            "type": "string"
+          },
+          "vibrate": {
+            "type": "array",
+            "items": {
+              "type": "number"
+            }
+          },
+          "badgeMobile": {
+            "type": "number"
+          },
+          "soundIos": {
+            "type": "string"
+          },
+          "soundAndroid": {
+            "type": "string"
+          },
+          "sound": {
+            "type": "string"
+          }
+        },
+        "required": []
+      },
+      "com.ppg.core.CreateBucketSilentContextDto": {
+        "type": "object",
+        "properties": {
+          "externalData": {
+            "type": "string"
+          },
+          "expiresAt": {
+            "type": "string"
+          },
+          "ttl": {
+            "type": "number"
+          }
+        },
+        "required": []
+      },
+      "com.ppg.core.SendManyToContextDto": {
+        "type": "object",
+        "properties": {
+          "receivers": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "credentialId": {
+                  "description": "Credential identifier from previously created bucked",
+                  "type": "string"
+                },
+                "foreignId": {
+                  "description": "Subscribers identifier from client system",
+                  "type": "string"
+                },
+                "auth": {
+                  "description": "The auth secret from the PushSubscription",
+                  "type": "string"
+                },
+                "p256dh": {
+                  "description": "The p256dh key from the PushSubscription",
+                  "type": "string"
+                },
+                "endpoint": {
+                  "description": "The endpoint from the PushSubscription",
+                  "type": "string"
+                },
+                "token": {
+                  "description": "Token from mobile push subscription",
+                  "type": "string"
+                }
+              },
+              "required": ["credentialId"]
+            }
+          }
+        },
+        "required": []
+      },
+      "com.ppg.core.SendOneMessageViaDataCtxCommandDto": {
+        "type": "object",
+        "properties": {
+          "receiver": {
+            "type": "object",
+            "properties": {
+              "credentialId": {
+                "description": "Credential identifier from previously created bucked",
+                "type": "string"
+              },
+              "foreignId": {
+                "description": "Subscribers identifier from client system",
+                "type": "string"
+              },
+              "auth": {
+                "description": "The auth secret from the PushSubscription",
+                "type": "string"
+              },
+              "p256dh": {
+                "description": "The p256dh key from the PushSubscription",
+                "type": "string"
+              },
+              "endpoint": {
+                "description": "The endpoint from the PushSubscription",
+                "type": "string"
+              },
+              "token": {
+                "description": "Token from mobile push subscription",
+                "type": "string"
+              }
+            },
+            "required": ["credentialId"]
+          },
+          "metadata": {
+            "type": "object",
+            "properties": {
+              "icon": {
+                "type": "string"
+              },
+              "smallIcon": {
+                "type": "string"
+              },
+              "image": {
+                "type": "string"
+              },
+              "channelName": {
+                "type": "string"
+              },
+              "badge": {
+                "type": "number"
+              },
+              "actions": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "action": {
+                      "type": "string"
+                    },
+                    "behaviour": {
+                      "type": "string"
+                    },
+                    "behaviourAndroid": {
+                      "type": "string"
+                    },
+                    "behaviourHuawei": {
+                      "type": "string"
+                    },
+                    "behaviourIos": {
+                      "type": "string"
+                    },
+                    "behaviourWebPush": {
+                      "type": "string"
+                    },
+                    "icon": {
+                      "type": "string"
+                    },
+                    "title": {
+                      "type": "string"
+                    }
+                  },
+                  "required": []
+                }
+              },
+              "behaviour": {
+                "type": "string"
+              },
+              "behaviourAndroid": {
+                "type": "string"
+              },
+              "behaviourHuawei": {
+                "type": "string"
+              },
+              "behaviourIos": {
+                "type": "string"
+              },
+              "behaviourWebPush": {
+                "type": "string"
+              },
+              "title": {
+                "type": "string"
+              },
+              "body": {
+                "type": "string"
+              },
+              "subtitle": {
+                "type": "string"
+              },
+              "expiresAt": {
+                "type": "string"
+              },
+              "lang": {
+                "type": "string"
+              },
+              "renotify": {
+                "type": "boolean"
+              },
+              "requireInteraction": {
+                "type": "boolean"
+              },
+              "silent": {
+                "type": "boolean"
+              },
+              "tag": {
+                "type": "string"
+              },
+              "ttl": {
+                "type": "number"
+              },
+              "externalData": {
+                "type": "string"
+              },
+              "vibrate": {
+                "type": "array",
+                "items": {
+                  "type": "number"
+                }
+              },
+              "badgeMobile": {
+                "type": "number"
+              },
+              "soundIos": {
+                "type": "string"
+              },
+              "soundAndroid": {
+                "type": "string"
+              },
+              "sound": {
+                "type": "string"
+              }
+            },
+            "required": []
+          }
+        },
+        "required": ["receiver", "metadata"]
+      },
+      "com.ppg.core.SendOneMessageViaSilentCtxCommandDto": {
+        "type": "object",
+        "properties": {
+          "receiver": {
+            "type": "object",
+            "properties": {
+              "credentialId": {
+                "description": "Credential identifier from previously created bucked",
+                "type": "string"
+              },
+              "foreignId": {
+                "description": "Subscribers identifier from client system",
+                "type": "string"
+              },
+              "auth": {
+                "description": "The auth secret from the PushSubscription",
+                "type": "string"
+              },
+              "p256dh": {
+                "description": "The p256dh key from the PushSubscription",
+                "type": "string"
+              },
+              "endpoint": {
+                "description": "The endpoint from the PushSubscription",
+                "type": "string"
+              },
+              "token": {
+                "description": "Token from mobile push subscription",
+                "type": "string"
+              }
+            },
+            "required": ["credentialId"]
+          },
+          "metadata": {}
+        },
+        "required": ["receiver"]
+      },
+      "com.ppg.core.SendOneMessageViaRawCtxCommandDto": {
+        "type": "object",
+        "properties": {
+          "receiver": {
+            "type": "object",
+            "properties": {
+              "credentialId": {
+                "description": "Credential identifier from previously created bucked",
+                "type": "string"
+              },
+              "foreignId": {
+                "description": "Subscribers identifier from client system",
+                "type": "string"
+              },
+              "auth": {
+                "description": "The auth secret from the PushSubscription",
+                "type": "string"
+              },
+              "p256dh": {
+                "description": "The p256dh key from the PushSubscription",
+                "type": "string"
+              },
+              "endpoint": {
+                "description": "The endpoint from the PushSubscription",
+                "type": "string"
+              },
+              "token": {
+                "description": "Token from mobile push subscription",
+                "type": "string"
+              }
+            },
+            "required": ["credentialId"]
+          },
+          "metadata": {
+            "type": "object",
+            "properties": {
+              "common": {
+                "type": "object",
+                "properties": {
+                  "title": {
+                    "type": "string"
+                  },
+                  "body": {
+                    "type": "string"
+                  },
+                  "collapseKey": {
+                    "type": "string"
+                  },
+                  "data": {
+                    "oneOf": [
+                      {
+                        "type": "object",
+                        "additionalProperties": {
+                          "type": "string"
+                        }
+                      },
+                      {
+                        "type": "string"
+                      }
+                    ]
+                  },
+                  "expiresAt": {
+                    "type": "string"
+                  },
+                  "iconUrl": {
+                    "type": "string"
+                  },
+                  "imageUrl": {
+                    "type": "string"
+                  },
+                  "ttl": {
+                    "type": "number"
+                  }
+                },
+                "required": []
+              },
+              "chromium": {
+                "type": "object",
+                "properties": {
+                  "badge": {
+                    "description": "The URL of the image used to represent the notification when there is not enough space to display the notification itself. Experimental.",
+                    "type": "string"
+                  },
+                  "image": {
+                    "description": "The URL of an image to be displayed as part of the notification, as specified in the constructor's options parameter. Experimental.",
+                    "type": "string"
+                  },
+                  "icon": {
+                    "description": "The URL of the image used as an icon of the notification as specified in the constructor's options parameter.",
+                    "type": "string"
+                  },
+                  "actions": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "action": {
+                          "type": "string"
+                        },
+                        "title": {
+                          "type": "string"
+                        },
+                        "icon": {
+                          "type": "string"
+                        }
+                      },
+                      "required": []
+                    }
+                  },
+                  "body": {
+                    "description": "The body string of the notification as specified in the constructor's options parameter",
+                    "type": "string"
+                  },
+                  "data": {
+                    "description": "Custom payload string object string|object",
+                    "oneOf": [
+                      {
+                        "type": "object",
+                        "additionalProperties": {}
+                      },
+                      {
+                        "type": "string"
+                      }
+                    ]
+                  },
+                  "defaultAction": {
+                    "type": "string"
+                  },
+                  "dir": {
+                    "description": "The text direction of the notification as specified in the constructor's options parameter",
+                    "type": "string",
+                    "enum": ["auto", "ltr", "rtl"]
+                  },
+                  "expiresAt": {
+                    "type": "string"
+                  },
+                  "lang": {
+                    "description": "The language code of the notification as specified in the constructor's options parameter",
+                    "type": "string"
+                  },
+                  "renotify": {
+                    "description": "Specifies whether the user should be notified after a new notification replaces an old one",
+                    "type": "boolean"
+                  },
+                  "requireInteraction": {
+                    "description": "A boolean value indicating that a notification should remain active \nuntil the user clicks or dismisses it, rather than closing automatically.\nExperimental",
+                    "type": "boolean"
+                  },
+                  "silent": {
+                    "description": "Specifies whether the notification should be silent — i.e.,\nno sounds or vibrations should be issued, regardless of the device settings.\nExperimental",
+                    "type": "boolean"
+                  },
+                  "tag": {
+                    "description": "The ID of the notification (if any) as specified in the constructor's options parameter.",
+                    "type": "string"
+                  },
+                  "title": {
+                    "description": "The title of the notification.",
+                    "type": "string"
+                  },
+                  "ttl": {
+                    "type": "number"
+                  },
+                  "vibrate": {
+                    "description": "Specifies a vibration pattern for devices with vibration hardware to emit.\nExperimental",
+                    "type": "array",
+                    "items": {
+                      "type": "number"
+                    }
+                  }
+                },
+                "required": []
+              },
+              "edge": {
+                "type": "object",
+                "properties": {
+                  "badge": {
+                    "description": "The URL of the image used to represent the notification when there is not enough space to display the notification itself. Experimental.",
+                    "type": "string"
+                  },
+                  "image": {
+                    "description": "The URL of an image to be displayed as part of the notification, as specified in the constructor's options parameter. Experimental.",
+                    "type": "string"
+                  },
+                  "icon": {
+                    "description": "The URL of the image used as an icon of the notification as specified in the constructor's options parameter.",
+                    "type": "string"
+                  },
+                  "actions": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "action": {
+                          "type": "string"
+                        },
+                        "title": {
+                          "type": "string"
+                        },
+                        "icon": {
+                          "type": "string"
+                        }
+                      },
+                      "required": []
+                    }
+                  },
+                  "body": {
+                    "description": "The body string of the notification as specified in the constructor's options parameter",
+                    "type": "string"
+                  },
+                  "data": {
+                    "description": "Custom payload string object string|object",
+                    "oneOf": [
+                      {
+                        "type": "object",
+                        "additionalProperties": {}
+                      },
+                      {
+                        "type": "string"
+                      }
+                    ]
+                  },
+                  "defaultAction": {
+                    "type": "string"
+                  },
+                  "dir": {
+                    "description": "The text direction of the notification as specified in the constructor's options parameter",
+                    "type": "string",
+                    "enum": ["auto", "ltr", "rtl"]
+                  },
+                  "expiresAt": {
+                    "type": "string"
+                  },
+                  "lang": {
+                    "description": "The language code of the notification as specified in the constructor's options parameter",
+                    "type": "string"
+                  },
+                  "renotify": {
+                    "description": "Specifies whether the user should be notified after a new notification replaces an old one",
+                    "type": "boolean"
+                  },
+                  "requireInteraction": {
+                    "description": "A boolean value indicating that a notification should remain active \nuntil the user clicks or dismisses it, rather than closing automatically.\nExperimental",
+                    "type": "boolean"
+                  },
+                  "silent": {
+                    "description": "Specifies whether the notification should be silent — i.e.,\nno sounds or vibrations should be issued, regardless of the device settings.\nExperimental",
+                    "type": "boolean"
+                  },
+                  "tag": {
+                    "description": "The ID of the notification (if any) as specified in the constructor's options parameter.",
+                    "type": "string"
+                  },
+                  "title": {
+                    "description": "The title of the notification.",
+                    "type": "string"
+                  },
+                  "ttl": {
+                    "type": "number"
+                  },
+                  "vibrate": {
+                    "description": "Specifies a vibration pattern for devices with vibration hardware to emit.\nExperimental",
+                    "type": "array",
+                    "items": {
+                      "type": "number"
+                    }
+                  }
+                },
+                "required": []
+              },
+              "firefox": {
+                "type": "object",
+                "properties": {
+                  "badge": {
+                    "description": "The URL of the image used to represent the notification when there is not enough space to display the notification itself. Experimental.",
+                    "type": "string"
+                  },
+                  "image": {
+                    "description": "The URL of an image to be displayed as part of the notification, as specified in the constructor's options parameter. Experimental.",
+                    "type": "string"
+                  },
+                  "icon": {
+                    "description": "The URL of the image used as an icon of the notification as specified in the constructor's options parameter.",
+                    "type": "string"
+                  },
+                  "actions": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "action": {
+                          "type": "string"
+                        },
+                        "title": {
+                          "type": "string"
+                        },
+                        "icon": {
+                          "type": "string"
+                        }
+                      },
+                      "required": []
+                    }
+                  },
+                  "body": {
+                    "description": "The body string of the notification as specified in the constructor's options parameter",
+                    "type": "string"
+                  },
+                  "data": {
+                    "description": "Custom payload string object string|object",
+                    "oneOf": [
+                      {
+                        "type": "object",
+                        "additionalProperties": {}
+                      },
+                      {
+                        "type": "string"
+                      }
+                    ]
+                  },
+                  "defaultAction": {
+                    "type": "string"
+                  },
+                  "dir": {
+                    "description": "The text direction of the notification as specified in the constructor's options parameter",
+                    "type": "string",
+                    "enum": ["auto", "ltr", "rtl"]
+                  },
+                  "expiresAt": {
+                    "type": "string"
+                  },
+                  "lang": {
+                    "description": "The language code of the notification as specified in the constructor's options parameter",
+                    "type": "string"
+                  },
+                  "renotify": {
+                    "description": "Specifies whether the user should be notified after a new notification replaces an old one",
+                    "type": "boolean"
+                  },
+                  "requireInteraction": {
+                    "description": "A boolean value indicating that a notification should remain active \nuntil the user clicks or dismisses it, rather than closing automatically.\nExperimental",
+                    "type": "boolean"
+                  },
+                  "silent": {
+                    "description": "Specifies whether the notification should be silent — i.e.,\nno sounds or vibrations should be issued, regardless of the device settings.\nExperimental",
+                    "type": "boolean"
+                  },
+                  "tag": {
+                    "description": "The ID of the notification (if any) as specified in the constructor's options parameter.",
+                    "type": "string"
+                  },
+                  "title": {
+                    "description": "The title of the notification.",
+                    "type": "string"
+                  },
+                  "ttl": {
+                    "type": "number"
+                  },
+                  "vibrate": {
+                    "description": "Specifies a vibration pattern for devices with vibration hardware to emit.\nExperimental",
+                    "type": "array",
+                    "items": {
+                      "type": "number"
+                    }
+                  }
+                },
+                "required": []
+              },
+              "safariVapid": {
+                "type": "object",
+                "properties": {
+                  "badge": {
+                    "description": "The URL of the image used to represent the notification when there is not enough space to display the notification itself. Experimental.",
+                    "type": "string"
+                  },
+                  "image": {
+                    "description": "The URL of an image to be displayed as part of the notification, as specified in the constructor's options parameter. Experimental.",
+                    "type": "string"
+                  },
+                  "icon": {
+                    "description": "The URL of the image used as an icon of the notification as specified in the constructor's options parameter.",
+                    "type": "string"
+                  },
+                  "actions": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "action": {
+                          "type": "string"
+                        },
+                        "title": {
+                          "type": "string"
+                        },
+                        "icon": {
+                          "type": "string"
+                        }
+                      },
+                      "required": []
+                    }
+                  },
+                  "body": {
+                    "description": "The body string of the notification as specified in the constructor's options parameter",
+                    "type": "string"
+                  },
+                  "data": {
+                    "description": "Custom payload string object string|object",
+                    "oneOf": [
+                      {
+                        "type": "object",
+                        "additionalProperties": {}
+                      },
+                      {
+                        "type": "string"
+                      }
+                    ]
+                  },
+                  "defaultAction": {
+                    "type": "string"
+                  },
+                  "dir": {
+                    "description": "The text direction of the notification as specified in the constructor's options parameter",
+                    "type": "string",
+                    "enum": ["auto", "ltr", "rtl"]
+                  },
+                  "expiresAt": {
+                    "type": "string"
+                  },
+                  "lang": {
+                    "description": "The language code of the notification as specified in the constructor's options parameter",
+                    "type": "string"
+                  },
+                  "renotify": {
+                    "description": "Specifies whether the user should be notified after a new notification replaces an old one",
+                    "type": "boolean"
+                  },
+                  "requireInteraction": {
+                    "description": "A boolean value indicating that a notification should remain active \nuntil the user clicks or dismisses it, rather than closing automatically.\nExperimental",
+                    "type": "boolean"
+                  },
+                  "silent": {
+                    "description": "Specifies whether the notification should be silent — i.e.,\nno sounds or vibrations should be issued, regardless of the device settings.\nExperimental",
+                    "type": "boolean"
+                  },
+                  "tag": {
+                    "description": "The ID of the notification (if any) as specified in the constructor's options parameter.",
+                    "type": "string"
+                  },
+                  "title": {
+                    "description": "The title of the notification.",
+                    "type": "string"
+                  },
+                  "ttl": {
+                    "type": "number"
+                  },
+                  "vibrate": {
+                    "description": "Specifies a vibration pattern for devices with vibration hardware to emit.\nExperimental",
+                    "type": "array",
+                    "items": {
+                      "type": "number"
+                    }
+                  }
+                },
+                "required": []
+              },
+              "huawei": {
+                "type": "object",
+                "properties": {
+                  "notification": {},
+                  "biTag": {
+                    "description": "Tag of a message in a batch delivery task.\nThe tag is returned to your server when Push Kit sends the message receipt.\nYour server can analyze message delivery statistics based on bi_tag.",
+                    "type": "string"
+                  },
+                  "collapseKey": {
+                    "description": "Mode for the Push Kit server to cache messages sent to an offline device. These cached messages will be delivered once the device goes online again. The options are as follows:\n0: Only the latest message sent by each app to the user device is cached.\n-1: All messages are cached.\n1-100: message cache group ID. Messages are cached by group. Each group can cache only one message for each app.\nFor example, if you send 10 messages and set collapse_key to 1 for the first five messages and to 2 for the rest, the latest message whose value of collapse_key is 1 and the latest message whose value of collapse_key is 2 are sent to the user after the user's device goes online.\nThe default value is -1.",
+                    "type": "number"
+                  },
+                  "data": {
+                    "description": "Custom message payload. If the data parameter is set, the value of the message.data field is overwritten.",
+                    "type": "string"
+                  },
+                  "fastAppTarget": {
+                    "description": "State of a mini program when a quick app sends a data message. The options are as follows:\n\t1: development state\n\t2: production state",
+                    "type": "number"
+                  },
+                  "receiptId": {
+                    "description": "Unique receipt ID that associates with the receipt URL and configuration of the downlink message. You can find the receipt ID in Message Receipt.",
+                    "type": "string"
+                  },
+                  "ttl": {
+                    "description": "Ttl in seconds",
+                    "type": "number"
+                  },
+                  "expiresAt": {
+                    "format": "Date.Iso8601",
+                    "example": "2023-07-05T08:19:58.715Z",
+                    "type": "string"
+                  }
+                },
+                "required": []
+              },
+              "ios": {},
+              "safari": {},
+              "android": {}
+            },
+            "required": []
+          }
+        },
+        "required": ["receiver"]
+      },
+      "com.ppg.core.AddTokenCommand": {
+        "type": "object",
+        "properties": {
+          "tenant": {
+            "description": "Tenant identifier. Example some-other-company",
+            "type": "string"
+          }
+        },
+        "required": []
+      },
+      "com.ppg.core.SetUseCaseRateLimitForTokenCommand": {
+        "type": "object",
+        "properties": {
+          "apiToken": {
+            "description": "client api token",
+            "type": "string"
+          },
+          "useCaseName": {
+            "description": "name of use case",
+            "type": "string"
+          },
+          "quota": {
+            "description": "request quota per interval",
+            "type": "number"
+          },
+          "interval": {
+            "description": "interval in milliseconds",
+            "type": "number"
+          }
+        },
+        "required": []
+      },
+      "com.ppg.core.RevokeCommandToken": {
+        "type": "object",
+        "properties": {
+          "token": {
+            "description": "Authorization token which should be revoked",
+            "type": "string"
+          }
+        },
+        "required": []
+      }
+    }
+  },
+  "tags": [
+    {
+      "name": "/",
+      "description": "ppg-core"
+    }
+  ],
+  "paths": {
+    "/": {
+      "get": {
+        "parameters": [],
+        "tags": ["/"],
+        "security": [],
+        "deprecated": false,
+        "summary": "Hello world",
+        "description": "",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/com.ppg.core.HelloDto"
+                }
+              }
+            }
+          },
+          "4XX": {
+            "description": "Application or business level errors",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/com.ppg.core.CommonErrorDto"
+                }
+              }
+            }
+          },
+          "5XX": {
+            "description": "Infrastructure level errors",
+            "content": {
+              "text/plain": {}
+            }
+          }
+        }
+      }
+    },
+    "/v1/context/{contextId}/events/clicked": {
+      "post": {
+        "parameters": [
+          {
+            "required": true,
+            "in": "path",
+            "name": "contextId",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "tags": ["/"],
+        "security": [],
+        "deprecated": false,
+        "summary": "Register notification clicked event",
+        "description": "When bucket callback specified then will be pass through due to config",
+        "responses": {
+          "201": {
+            "description": "Empty body",
+            "content": {
+              "text/plain": {}
+            }
+          },
+          "4XX": {
+            "description": "Application or business level errors",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/com.ppg.core.CommonErrorDto"
+                }
+              }
+            }
+          },
+          "5XX": {
+            "description": "Infrastructure level errors",
+            "content": {
+              "text/plain": {}
+            }
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/com.ppg.core.RegisterClickedDto"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/context/{contextId}/events/delivered": {
+      "post": {
+        "parameters": [
+          {
+            "required": true,
+            "in": "path",
+            "name": "contextId",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "tags": ["/"],
+        "security": [],
+        "deprecated": false,
+        "summary": "Register notification clicked event",
+        "description": "When bucket callback specified then will be pass through due to config",
+        "responses": {
+          "201": {
+            "description": "Empty body",
+            "content": {
+              "text/plain": {}
+            }
+          },
+          "4XX": {
+            "description": "Application or business level errors",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/com.ppg.core.CommonErrorDto"
+                }
+              }
+            }
+          },
+          "5XX": {
+            "description": "Infrastructure level errors",
+            "content": {
+              "text/plain": {}
+            }
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/com.ppg.core.RegisterDeliveredDto"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/context/{contextId}/events/closed": {
+      "post": {
+        "parameters": [
+          {
+            "required": true,
+            "in": "path",
+            "name": "contextId",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "tags": ["/"],
+        "security": [],
+        "deprecated": false,
+        "summary": "Register notification closed event",
+        "description": "When bucket callback specified then will be pass through due to config",
+        "responses": {
+          "201": {
+            "description": "Empty body",
+            "content": {
+              "text/plain": {}
+            }
+          },
+          "4XX": {
+            "description": "Application or business level errors",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/com.ppg.core.CommonErrorDto"
+                }
+              }
+            }
+          },
+          "5XX": {
+            "description": "Infrastructure level errors",
+            "content": {
+              "text/plain": {}
+            }
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/com.ppg.core.RegisterClosedDto"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/bucket": {
+      "post": {
+        "parameters": [
+          {
+            "required": false,
+            "in": "header",
+            "name": "authorization",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "tags": ["/"],
+        "security": [],
+        "deprecated": false,
+        "summary": "Create temporary bucket",
+        "description": "Describe sth about that",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/com.ppg.core.CreateBucketResponseDto"
+                }
+              }
+            }
+          },
+          "4XX": {
+            "description": "Application or business level errors",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/com.ppg.core.CommonErrorDto"
+                }
+              }
+            }
+          },
+          "5XX": {
+            "description": "Infrastructure level errors",
+            "content": {
+              "text/plain": {}
+            }
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/com.ppg.core.CreateBucketDto"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/bucket/{bucketId}/context/raw": {
+      "post": {
+        "parameters": [
+          {
+            "required": false,
+            "in": "header",
+            "name": "authorization",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "tags": ["/"],
+        "security": [],
+        "deprecated": false,
+        "summary": "Create raw context for bucket",
+        "description": "Beta access",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/com.ppg.core.CreateBucketContextResponseDto"
+                }
+              }
+            }
+          },
+          "4XX": {
+            "description": "Application or business level errors",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/com.ppg.core.CommonErrorDto"
+                }
+              }
+            }
+          },
+          "5XX": {
+            "description": "Infrastructure level errors",
+            "content": {
+              "text/plain": {}
+            }
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/com.ppg.core.CreateBucketRawContextDto"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/bucket/{bucketId}/context/data": {
+      "post": {
+        "parameters": [
+          {
+            "required": false,
+            "in": "header",
+            "name": "authorization",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "required": false,
+            "in": "header",
+            "name": "authorization",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "tags": ["/"],
+        "security": [],
+        "deprecated": false,
+        "summary": "Create data context for bucket",
+        "description": "Create base notification with actions - supported by our SDK",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/com.ppg.core.CreateBucketContextResponseDto"
+                }
+              }
+            }
+          },
+          "4XX": {
+            "description": "Application or business level errors",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/com.ppg.core.CommonErrorDto"
+                }
+              }
+            }
+          },
+          "5XX": {
+            "description": "Infrastructure level errors",
+            "content": {
+              "text/plain": {}
+            }
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/com.ppg.core.CreateBucketDataContextDto"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/bucket/{bucketId}/context/silent": {
+      "post": {
+        "parameters": [
+          {
+            "required": false,
+            "in": "header",
+            "name": "authorization",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "tags": ["/"],
+        "security": [],
+        "deprecated": false,
+        "summary": "Create silent context for bucket",
+        "description": "Silent notification without notifications - supported by our SDK",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/com.ppg.core.CreateBucketContextResponseDto"
+                }
+              }
+            }
+          },
+          "4XX": {
+            "description": "Application or business level errors",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/com.ppg.core.CommonErrorDto"
+                }
+              }
+            }
+          },
+          "5XX": {
+            "description": "Infrastructure level errors",
+            "content": {
+              "text/plain": {}
+            }
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/com.ppg.core.CreateBucketSilentContextDto"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/bucket/{bucketId}/context/{contextId}/send": {
+      "post": {
+        "parameters": [
+          {
+            "required": false,
+            "in": "header",
+            "name": "authorization",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "required": true,
+            "in": "path",
+            "name": "bucketId",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "required": true,
+            "in": "path",
+            "name": "contextId",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "tags": ["/"],
+        "security": [],
+        "deprecated": false,
+        "summary": "Send message to raw context in bucket",
+        "description": "",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/com.ppg.core.SendManyResponseDto"
+                }
+              }
+            }
+          },
+          "4XX": {
+            "description": "Application or business level errors",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/com.ppg.core.CommonErrorDto"
+                }
+              }
+            }
+          },
+          "5XX": {
+            "description": "Infrastructure level errors",
+            "content": {
+              "text/plain": {}
+            }
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/com.ppg.core.SendManyToContextDto"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/bucket/{bucketId}/send": {
+      "post": {
+        "parameters": [
+          {
+            "required": false,
+            "in": "header",
+            "name": "authorization",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "required": true,
+            "in": "path",
+            "name": "bucketId",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "required": false,
+            "in": "header",
+            "name": "authorization",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "required": false,
+            "in": "header",
+            "name": "authorization",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "tags": ["/"],
+        "security": [],
+        "deprecated": false,
+        "summary": "Send one message via bucket - via data context",
+        "description": "",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/com.ppg.core.MessageResponseDto"
+                }
+              }
+            }
+          },
+          "4XX": {
+            "description": "Application or business level errors",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/com.ppg.core.CommonErrorDto"
+                }
+              }
+            }
+          },
+          "5XX": {
+            "description": "Infrastructure level errors",
+            "content": {
+              "text/plain": {}
+            }
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/com.ppg.core.SendOneMessageViaDataCtxCommandDto"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/bucket/{bucketId}/send/silent": {
+      "post": {
+        "parameters": [
+          {
+            "required": false,
+            "in": "header",
+            "name": "authorization",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "required": true,
+            "in": "path",
+            "name": "bucketId",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "tags": ["/"],
+        "security": [],
+        "deprecated": false,
+        "summary": "Send one message via bucket - via silent context",
+        "description": "",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/com.ppg.core.MessageResponseDto"
+                }
+              }
+            }
+          },
+          "4XX": {
+            "description": "Application or business level errors",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/com.ppg.core.CommonErrorDto"
+                }
+              }
+            }
+          },
+          "5XX": {
+            "description": "Infrastructure level errors",
+            "content": {
+              "text/plain": {}
+            }
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/com.ppg.core.SendOneMessageViaSilentCtxCommandDto"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/bucket/{bucketId}/send/raw": {
+      "post": {
+        "parameters": [
+          {
+            "required": false,
+            "in": "header",
+            "name": "authorization",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "required": true,
+            "in": "path",
+            "name": "bucketId",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "required": false,
+            "in": "header",
+            "name": "authorization",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "tags": ["/"],
+        "security": [],
+        "deprecated": false,
+        "summary": "Send one message via bucket - via raw context",
+        "description": "",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/com.ppg.core.MessageResponseDto"
+                }
+              }
+            }
+          },
+          "4XX": {
+            "description": "Application or business level errors",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/com.ppg.core.CommonErrorDto"
+                }
+              }
+            }
+          },
+          "5XX": {
+            "description": "Infrastructure level errors",
+            "content": {
+              "text/plain": {}
+            }
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/com.ppg.core.SendOneMessageViaRawCtxCommandDto"
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "servers": [
+    {
+      "url": "https://api-core.pushpushgo.com"
+    }
+  ]
+}
